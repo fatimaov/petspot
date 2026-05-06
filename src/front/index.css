@@ -8,9 +8,12 @@
   --red: #e44e70;
   --black: #000000;
   --white: #ffffff;
+
   --primary-hover: #fec2c2;
+
   --font-family-base: "Elms Sans", Arial, Helvetica, sans-serif;
 
+  /* Keep develop auth styles working, but map them to this branch's variables. */
   --ps-bg-soft: var(--pink-light);
   --ps-bg-strong: var(--pink-medium);
   --ps-panel: #f2d7d2;
@@ -35,7 +38,7 @@ body {
   padding: 0;
   font-family: var(--font-family-base);
   color: var(--black);
-  /* background-color: var(--pink-light); */
+  background-color: var(--pink-light);
   text-align: left;
   font-size: 16px;
 }

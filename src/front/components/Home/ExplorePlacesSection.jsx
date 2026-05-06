@@ -31,6 +31,8 @@ function ExplorePlacesSection() {
     }, []);
 
     useEffect(() => {
+        if (store.places.length > 0) return;
+
         const loadPlaces = async () => {
             try {
                 const places = await getPlaces();
@@ -41,7 +43,7 @@ function ExplorePlacesSection() {
         };
 
         loadPlaces();
-    }, []);
+    }, [dispatch, store.places.length]);
 
     const places = useMemo(() => store.places.slice(0, 10), [store.places]);
     const totalPages = Math.max(1, Math.ceil(places.length / placesPerView));
