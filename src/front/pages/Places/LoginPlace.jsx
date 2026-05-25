@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Navbar } from "../../components/Navbar";
 import LoginPlaceForm from "../../components/Places/LoginPlaceForm";
 import placeHero from "../../assets/img/places-hero.png";
 
@@ -7,7 +6,6 @@ function LoginPlace() {
 
     return (
         <>
-            <Navbar />
             <div className="auth-page">
                 <div className="auth-hero">
                     <h1 className="auth-hero-title">Place Account</h1>

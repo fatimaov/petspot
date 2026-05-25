@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Navbar } from "../../components/Navbar";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import LocationMap from "../../components/LocationMap";
 import { getDefaultPlaceThumbnail } from "../../components/Places/placeFormUtils";
@@ -270,7 +269,6 @@ function SignupPlace() {
 
     return (
         <>
-            <Navbar />
             <div className="auth-page">
                 <div className="auth-hero">
                     <h1 className="auth-hero-title">Place Account</h1>

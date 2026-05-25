@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Navbar } from "../components/Navbar";
 import signupHero from "../assets/img/signup-user.png";
 
 export const SignupUser = () => {
@@ -45,7 +44,6 @@ export const SignupUser = () => {
 
     return (
         <>
-            <Navbar />
             <div className="auth-page">
                 <div className="auth-hero">
                     <h1 className="auth-hero-title">My Account</h1>

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
-import { Navbar } from "../../components/Navbar";
 import userHero from "../../assets/img/user.png"
 
 
@@ -63,7 +62,6 @@ function UserLogin() {
 
     return (
         <>
-            <Navbar />
             <div className="auth-page">
 
                 <div className="auth-hero">
