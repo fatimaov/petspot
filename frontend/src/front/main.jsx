@@ -8,8 +8,9 @@ import { BackendURL } from './components/BackendURL';
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 const Main = () => {
+    const backendUrl = import.meta.env.VITE_BACKEND_URL?.trim();
     
-    if(! import.meta.env.VITE_BACKEND_URL ||  import.meta.env.VITE_BACKEND_URL == "") return (
+    if(!backendUrl) return (
         <React.StrictMode>
               <BackendURL/ >
         </React.StrictMode>

@@ -5,9 +5,13 @@ import os
 from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
 # from flask_swagger import swagger
+from dotenv import load_dotenv
+
+backend_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+load_dotenv(os.path.join(backend_dir, ".env"))
+
 from api.utils import APIException, generate_sitemap
 from api.models import db
-from dotenv import load_dotenv
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
@@ -15,13 +19,12 @@ from flask_socketio import SocketIO
 from api.sockets import setup_sockets
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
-load_dotenv()
 
 # from models import Person
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
-    os.path.realpath(__file__)), '../dist/')
+    os.path.realpath(__file__)), '../static/')
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -70,7 +73,7 @@ def handle_invalid_usage(error):
 
 @app.route('/')
 def sitemap():
-    if ENV == "development":
+    if ENV == "development" or not os.path.isfile(os.path.join(static_file_dir, 'index.html')):
         return generate_sitemap(app)
     return send_from_directory(static_file_dir, 'index.html')
 
@@ -86,10 +89,12 @@ def serve_any_other_file(error):
     file_path = os.path.join(static_file_dir, path)
     if os.path.isfile(file_path):
         return send_from_directory(static_file_dir, path)
+    if not os.path.isfile(os.path.join(static_file_dir, 'index.html')):
+        return jsonify({"error": "Not found"}), 404
     return send_from_directory(static_file_dir, 'index.html')
 
 
-# this only runs if `$ python src/main.py` is executed
+# this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))
     socketio.run(app, host='0.0.0.0', port=PORT, debug=True, allow_unsafe_werkzeug=True)
