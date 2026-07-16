@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from "react";
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const TellMeMore = () => {
   const [image, setImage] = useState(null);

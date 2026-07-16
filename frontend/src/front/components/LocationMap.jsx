@@ -1,4 +1,5 @@
 import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api";
+import useGoogleMapsAuthFailure from "../hooks/useGoogleMapsAuthFailure";
 import { MUTED_MAP_STYLES } from "./mapStyles";
 
 const HOME_PIN_COLORS = {
@@ -22,12 +23,14 @@ function createMarkerSvg({ fill, stroke, glyph }) {
     `.trim();
 }
 
-function LocationMap({ latitude, longitude, label = "Location", draggable = false, onPositionChange }) {
-    const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+function LocationMapContent({ googleMapsApiKey, latitude, longitude, label = "Location", draggable = false, onPositionChange }) {
+    const hasAuthFailure = useGoogleMapsAuthFailure();
+    const { isLoaded, loadError } = useJsApiLoader({
+        googleMapsApiKey,
     });
 
     if (!latitude || !longitude) return <p>No location available.</p>;
+    if (loadError || hasAuthFailure) return <p>Map could not load.</p>;
     if (!isLoaded) return <p>Loading map...</p>;
 
     const position = {
@@ -71,6 +74,16 @@ function LocationMap({ latitude, longitude, label = "Location", draggable = fals
             />
         </GoogleMap>
     );
+}
+
+function LocationMap(props) {
+    const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY?.trim();
+
+    if (!googleMapsApiKey) {
+        return <p>Google Maps API key is not configured.</p>;
+    }
+
+    return <LocationMapContent {...props} googleMapsApiKey={googleMapsApiKey} />;
 }
 
 export default LocationMap;

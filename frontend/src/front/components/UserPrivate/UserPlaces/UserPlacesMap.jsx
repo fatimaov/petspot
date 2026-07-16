@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { GoogleMap, InfoWindowF, MarkerF, useJsApiLoader } from "@react-google-maps/api";
 import { Link } from "react-router-dom";
 import { getDefaultPlaceThumbnail } from "../../Places/placeFormUtils";
+import useGoogleMapsAuthFailure from "../../../hooks/useGoogleMapsAuthFailure";
 import { MUTED_MAP_STYLES } from "../../mapStyles";
 
 const FALLBACK_CENTER = { lat: 40.4168, lng: -3.7038 };
@@ -33,15 +34,17 @@ function createMarkerSvg({ fill, stroke, glyph }) {
     `.trim();
 }
 
-function UserPlacesMap({
+function UserPlacesMapContent({
+    googleMapsApiKey,
     places = [],
     user,
     includeUserLocation = false,
     selectedPlace,
     setSelectedPlace
 }) {
-    const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    const hasAuthFailure = useGoogleMapsAuthFailure();
+    const { isLoaded, loadError } = useJsApiLoader({
+        googleMapsApiKey,
     });
     const mapRef = useRef(null);
 
@@ -169,6 +172,7 @@ function UserPlacesMap({
         placesWithCoordinates[0]?.position ||
         FALLBACK_CENTER;
 
+    if (loadError || hasAuthFailure) return <p className="user-places__empty">Map could not load.</p>;
     if (!isLoaded) return <p className="user-places__empty">Loading map...</p>;
 
     return (
@@ -250,6 +254,16 @@ function UserPlacesMap({
             </GoogleMap>
         </div>
     );
+}
+
+function UserPlacesMap(props) {
+    const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY?.trim();
+
+    if (!googleMapsApiKey) {
+        return <p className="user-places__empty">Google Maps API key is not configured.</p>;
+    }
+
+    return <UserPlacesMapContent {...props} googleMapsApiKey={googleMapsApiKey} />;
 }
 
 export default UserPlacesMap;
